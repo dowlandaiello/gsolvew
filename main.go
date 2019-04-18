@@ -34,21 +34,17 @@ func main() {
 	reader := bufio.NewReader(os.Stdin) // Initialize reader
 
 	for i := 0; i < gridHeight; i++ { // Do until made all rows
-		fmt.Printf("Creating row %d\n", i) // Log create row
+		fmt.Printf("Row %d: ", i) // Log input row
 
-		for x := 0; x < gridWidth; x++ { // Ask for all letters
-			fmt.Printf("Char %d: ", x) // Log input char
+		input, err := reader.ReadString('\n') // Read up to \n
 
-			input, err := reader.ReadString('\n') // Read up to \n
-
-			if err != nil { // Check for errors
-				panic(err) // Panic
-			}
-
-			input = strings.Replace(input, "\n", "", -1) // Remove \n
-
-			grid.Rows[i].Letters = grid.Rows[i].Letters + input // Set letters
+		if err != nil { // Check for errors
+			panic(err) // Panic
 		}
+
+		input = strings.Replace(input, "\n", "", -1) // Remove \n
+
+		grid.Rows[i].Letters = input // Set letters
 	}
 
 	for {
