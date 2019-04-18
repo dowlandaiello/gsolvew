@@ -2,6 +2,7 @@
 package types
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -34,6 +35,7 @@ func (grid *Grid) FindString(s string) ([]uint64, []uint64) {
 
 findCoords:
 	for i, char := range s { // Iterate through chars
+		fmt.Println(n)
 		x, y := grid.GetCharPos(char, n) // Get position
 
 		if x == -1 || y == -1 { // Check invalid coords

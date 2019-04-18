@@ -13,38 +13,42 @@ import (
 
 // main is the main word search solver function.
 func main() {
-	if len(os.Args) == 1 { // Check invalid params
-		panic("Make sure to pass in word search width and height!") // Panic
-	}
-
-	gridWidth, err := strconv.Atoi(os.Args[1]) // Parse width
-
-	if err != nil { // Check for errors
-		panic(err) // Panic
-	}
-
-	gridHeight, err := strconv.Atoi(os.Args[2]) // Parse height
-
-	if err != nil { // Check for errors
-		panic(err) // Panic
-	}
-
-	grid := types.NewGrid(uint64(gridWidth), uint64(gridHeight)) // Initialize grid
+	var grid *types.Grid // Declare grid buffer
 
 	reader := bufio.NewReader(os.Stdin) // Initialize reader
 
-	for i := 0; i < gridHeight; i++ { // Do until made all rows
-		fmt.Printf("Row %d: ", i) // Log input row
-
-		input, err := reader.ReadString('\n') // Read up to \n
+	if len(os.Args) == 1 { // Check invalid params
+		panic("Make sure to pass in word search width and height!") // Panic
+	} else if len(os.Args) == 2 { // Check import grid
+		grid = importGrid(os.Args[1]) // Import grid
+	} else {
+		gridWidth, err := strconv.Atoi(os.Args[1]) // Parse width
 
 		if err != nil { // Check for errors
 			panic(err) // Panic
 		}
 
-		input = strings.Replace(input, "\n", "", -1) // Remove \n
+		gridHeight, err := strconv.Atoi(os.Args[2]) // Parse height
 
-		grid.Rows[i].Letters = input // Set letters
+		if err != nil { // Check for errors
+			panic(err) // Panic
+		}
+
+		grid = types.NewGrid(uint64(gridWidth), uint64(gridHeight)) // Initialize grid
+
+		for i := 0; i < gridHeight; i++ { // Do until made all rows
+			fmt.Printf("Row %d: ", i) // Log input row
+
+			input, err := reader.ReadString('\n') // Read up to \n
+
+			if err != nil { // Check for errors
+				panic(err) // Panic
+			}
+
+			input = strings.Replace(input, "\n", "", -1) // Remove \n
+
+			grid.Rows[i].Letters = input // Set letters
+		}
 	}
 
 	for {
@@ -80,6 +84,29 @@ func main() {
 			fmt.Println(rowStr) // Log row
 		}
 	}
+}
+
+// importGrid imports a grid.
+func importGrid(fileName string) *types.Grid {
+	file, err := os.Open(fileName) // Open file
+
+	if err != nil { // Check for errors
+		panic(err) // Panic
+	}
+
+	defer file.Close() // Close file
+
+	scanner := bufio.NewScanner(file) // Initialize scanner
+
+	var grid types.Grid // Initialize grid buffer
+
+	for scanner.Scan() { // Read entire file
+		line := scanner.Text() // Get line
+
+		grid.Rows = append(grid.Rows, types.NewRow(line)) // Set row
+	}
+
+	return &grid // Return read grid
 }
 
 // indexOf fetches the index of a value in a uint64 slice.

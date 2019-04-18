@@ -18,6 +18,8 @@ go install github.com/dowlandaiello/gsolvew
 
 ## Usage
 
+### Creating a new Grid
+
 From Source:
 
 ```zsh
@@ -28,4 +30,10 @@ Via Installed:
 
 ```zsh
 gsolvew word_search_width word_search_height
+```
+
+### Importing a local Grid
+
+```zsh
+gosolvew grid.txt
 ```
