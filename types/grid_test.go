@@ -46,19 +46,19 @@ func TestGetCharPos(t *testing.T) {
 		grid.Rows[i].SetLetters(row) // Set letters
 	}
 
-	x, y := grid.GetCharPos('a') // Get pos
+	x, y := grid.GetCharPos('a', 0) // Get pos
 
 	if x != 0 || y != 0 { // Check invalid
 		t.Fatal("failed to get pos") // Panic
 	}
 
-	x, y = grid.GetCharPos('b') // Get pos
+	x, y = grid.GetCharPos('b', 0) // Get pos
 
 	if x != 1 || y != 0 { // Check invalid
 		t.Fatal("failed to get pos") // Panic
 	}
 
-	x, y = grid.GetCharPos('e') // Get pos
+	x, y = grid.GetCharPos('e', 0) // Get pos
 
 	if x != 1 || y != 1 { // Check invalid
 		t.Fatal("failed to get pos") // Panic

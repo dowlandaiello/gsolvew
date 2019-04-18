@@ -60,6 +60,12 @@ func main() {
 
 		xCoords, yCoords := grid.FindString(wordToFind) // Find word
 
+		if len(xCoords) == 0 || len(yCoords) == 0 { // Check couldn't find a match
+			color.Red.Println("Couldn't find a match!") // Log err
+
+			continue // Continue
+		}
+
 		for y, row := range grid.Rows { // Iterate through rows
 			var rowStr string // Init row buffer
 

@@ -30,37 +30,55 @@ func (grid *Grid) FindString(s string) ([]uint64, []uint64) {
 	var xCoordinates []uint64 // Init x coords buffer
 	var yCoordinates []uint64 // Init y coords buffer
 
+	n := 0 // Init iterator
+
 findCoords:
 	for i, char := range s { // Iterate through chars
-		x, y := grid.GetCharPos(char) // Get position
+		x, y := grid.GetCharPos(char, n) // Get position
+
+		if x == -1 || y == -1 { // Check invalid coords
+			return []uint64{}, []uint64{} // Return null
+		}
 
 		if i != 0 { // Check is not first char
 			if math.Abs(float64(xCoordinates[i-1])-float64(x)) > 1 { // Check invalid selection
 				xCoordinates = xCoordinates[:0] // Reset slice
 				yCoordinates = yCoordinates[:0] // Reset slice
 
+				n++ // Increment
+
 				goto findCoords // Reset iteration
 			} else if math.Abs(float64(yCoordinates[i-1])-float64(y)) > 1 { // Check invalid selection
 				xCoordinates = xCoordinates[:0] // Reset slice
 				yCoordinates = yCoordinates[:0] // Reset slice
 
+				n++ // Increment
+
 				goto findCoords // Reset iteration
 			}
 		}
 
-		xCoordinates = append(xCoordinates, x) // Append x
-		yCoordinates = append(yCoordinates, y) // Append y
+		xCoordinates = append(xCoordinates, uint64(x)) // Append x
+		yCoordinates = append(yCoordinates, uint64(y)) // Append y
 	}
 
 	return xCoordinates, yCoordinates // Return coordinates
 }
 
 // GetCharPos gets the position of a char in the given grid.
-func (grid *Grid) GetCharPos(c rune) (uint64, uint64) {
+func (grid *Grid) GetCharPos(c rune, n int) (int64, int64) {
+	i := 0 // Init iterator
+
 	for y, row := range grid.Rows { // Iterate through rows
 		for x, char := range row.Letters { // Iterate through row letters
 			if char == c { // Check matching char
-				return uint64(x), uint64(y) // Return coords
+				if i != n { // Check invalid match
+					i++ // Increment iterator
+
+					continue // Continue
+				}
+
+				return int64(x), int64(y) // Return coords
 			}
 		}
 	}
